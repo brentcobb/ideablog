@@ -1,0 +1,1 @@
+angular.module('App').value('alerts', []);

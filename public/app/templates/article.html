@@ -1,0 +1,9 @@
+<div class="container">
+  <a class="pull-right" ng-href="/article/{{article._id}}/edit" ng-show="isAuthor()">
+    <i class="icon-pencil"></i>
+    Edit
+  </a>
+  <h2><a ng-href="/article/{{article.slug}}">{{article.title}}</a></h2>
+  <p>Published by {{article.author}} on {{article.publishedAt | date}}</p>
+  <div ng-bind-html-unsafe="article.html"></div>
+</div>

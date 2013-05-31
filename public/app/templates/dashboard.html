@@ -1,0 +1,34 @@
+<div class="navbar navbar-fixed-top navbar-inverse">
+  <div class="navbar-inner">
+    <div class="container">
+      <a href="/home" class="brand">Idea Blog</a>
+      <ul class="nav pull-right">
+        <li>
+          <a ng-click="logout()">Logout</a>
+        </li>
+        <li><a>{{user}}</a> <!-- this will become a link to the user home -->
+        </li>
+        <li>User Img Go here
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <a class="pull-right btn" ng-href="/article/new">
+    <i class="icon-plus"></i>
+    New Article
+  </a>
+  <h2>Dashboard</h2>
+  <ul style="list-style: none;">
+    <li class="media" ng-repeat="article in articles | orderBy: publishedAt">
+      <a class="pull-right" ng-href="/article/{{article._id}}/edit">
+        <i class="icon-pencil"></i>
+        Edit
+      </a>
+      <a ng-href="/article/{{article._id}}">{{article.title}}</a>
+      <small>Published by {{article.author}} on {{article.publishedAt | date}}</small>
+      <div class='hero-unit' ng-bind-html-unsafe="article.body"></div>
+    </li>
+  </ul>
+</div>
