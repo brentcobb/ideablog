@@ -12,4 +12,9 @@ angular.module('App').controller('LoginCtrl', function($scope, $http, $location,
       });
     $location.path('/dashboard');
   };
+
+   $scope.cancel = function() {
+    dialog.close();
+  };
+
 });

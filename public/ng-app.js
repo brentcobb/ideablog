@@ -84,6 +84,11 @@ angular.module('App').controller('LoginCtrl', function($scope, $http, $location,
       });
     $location.path('/dashboard');
   };
+
+   $scope.cancel = function() {
+    dialog.close();
+  };
+
 });
 angular.module('App').controller('ArticleEditCtrl', function($scope, $http, $routeParams, $location) {
   $scope.mode = 'Edit';
