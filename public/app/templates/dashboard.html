@@ -26,8 +26,14 @@
         <i class="icon-pencil"></i>
         Edit
       </a>
+
+      <!-- <a class="pull-right" hg-href="/article/{{article._id}}">
+        <i class="icon-remove"> -->
       <a ng-href="/article/{{article._id}}">{{article.title}}</a>
       <small>Published by {{article.author}} on {{article.publishedAt | date}}</small>
+      <a class="pull-right" ng-href="" ng-click='removePost()'>Delete</a>
+      
+
       <div class='hero-unit' ng-bind-html-unsafe="article.body"></div>
     </li>
   </ul>
