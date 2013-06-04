@@ -186,11 +186,14 @@ angular.module('App').controller('ArticleCtrl', function($scope, $http, $routePa
 });
 angular.module('App').controller('ArticleShowCtrl', function($scope, $http, $routeParams, $location, $_) {
 
-  $http.get('/api/article/' + article._id).success(function(data) {
+
+  $scope.showArticle = function (article_id) {
+
+  $http.get('/api/article/' + article_id).success(function(data) {
     $scope.article = $_(data.rows).pluck('value');
   });
 
-  
+  };
 
 });
 angular.module('App').controller('DashboardCtrl', function($scope, $http, $location, $_, $routeParams) {
@@ -231,9 +234,12 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
     $scope.user = data.user;
   });
 
-  //test area
-
-
+//////////////    test area   /////////////////////////////////////////////////
+//
+//    Working on a function to delete posts.  I think i have it set up correct.
+//    I just need to make the articles show correctly so that they can be 
+//    deleted.
+///////////////////////////////////////////////////////////////////////////////
   
 
 
@@ -242,7 +248,7 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
   $scope.removePost = function(article_rev){
   
     $http.delete("/article/" + article_rev);
-  }
+  };
 
 });
 

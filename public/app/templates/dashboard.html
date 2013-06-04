@@ -15,6 +15,9 @@
   </div>
 </div>
 <div class="container">
+
+    <!-- New Article Btn -->
+
   <a class="pull-right btn" ng-href="/article/new">
     <i class="icon-plus"></i>
     New Article
@@ -22,14 +25,19 @@
   <h2>Dashboard</h2>
   <ul style="list-style: none;">
     <li class="media" ng-repeat="article in articles | orderBy: publishedAt">
+     
       <!-- Edit article -->
       <a class="pull-right" ng-href="/article/{{article._id}}/edit">
         <i class="icon-pencil"></i>
         Edit
       </a>
 
+      <!-- Article link -->
 
       <a ng-href="/article/{{article._id}}">{{article.title}}</a>
+
+      <!-- Pubished date and author -->
+
       <small>Published by {{article.author}} on {{article.publishedAt | date}}</small>
 
       <!-- Delete Article -->

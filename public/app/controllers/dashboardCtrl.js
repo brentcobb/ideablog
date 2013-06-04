@@ -36,9 +36,12 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
     $scope.user = data.user;
   });
 
-  //test area
-
-
+//////////////    test area   /////////////////////////////////////////////////
+//
+//    Working on a function to delete posts.  I think i have it set up correct.
+//    I just need to make the articles show correctly so that they can be 
+//    deleted.
+///////////////////////////////////////////////////////////////////////////////
   
 
 
@@ -47,6 +50,6 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
   $scope.removePost = function(article_rev){
   
     $http.delete("/article/" + article_rev);
-  }
+  };
 
 });
