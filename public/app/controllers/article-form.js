@@ -19,7 +19,7 @@ angular.module('App').controller('ArticleNewCtrl', function($scope, $location, $
       alerts.push({type: 'success', msg: 'Successfully added article!'});
     })
     .error(function(err) {
-    alerts.push({type: 'error', msg: 'Error: ' + err.error +'!'});
+    //alerts.push({type: 'error', msg: 'Error: ' + err.error +'!'});
     });
   };
 

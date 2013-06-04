@@ -153,7 +153,7 @@ angular.module('App').controller('ArticleNewCtrl', function($scope, $location, $
       alerts.push({type: 'success', msg: 'Successfully added article!'});
     })
     .error(function(err) {
-    alerts.push({type: 'error', msg: 'Error: ' + err.error +'!'});
+    //alerts.push({type: 'error', msg: 'Error: ' + err.error +'!'});
     });
   };
 
@@ -186,6 +186,25 @@ angular.module('App').controller('ArticleCtrl', function($scope, $http, $routePa
 });
 angular.module('App').controller('ArticleShowCtrl', function($scope, $http, $routeParams, $location, $_) {
 
+//////////////    Username Retrieval    ///////////////////////////////////////
+//
+//    This function deternimes the currently logged in user.  This is used for
+//    the navbar.
+///////////////////////////////////////////////////////////////////////////////
+
+
+  $scope.mode = 'New';
+  $http.get('/api/session').success(function(data) {
+    $scope.user = data.user;
+  });
+
+//////////////    Article Retriever   /////////////////////////////////////////
+//
+//    Makes a http get request to the db to pull out the article.  On success
+//    it creates a function that is passed article, then sets scope.article to
+//    article.  On failure it returns the user to the dashboard.
+///////////////////////////////////////////////////////////////////////////////
+
  $http.get('/api/article/' + $routeParams.id)
     .success(function(article) {
       $scope.article = article;
@@ -194,13 +213,7 @@ angular.module('App').controller('ArticleShowCtrl', function($scope, $http, $rou
       $location.path('/dashboard');
   });
 
-  $scope.showArticle = function (article_id) {
 
-  $http.get('/api/article/' + article_id).success(function(data) {
-    $scope.article = $_(data.rows).pluck('value');
-  });
-
-  };
 
 });
 angular.module('App').controller('DashboardCtrl', function($scope, $http, $location, $_, $routeParams) {
@@ -248,13 +261,9 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
 //    deleted.
 ///////////////////////////////////////////////////////////////////////////////
   
-
-
-
-
-  $scope.removePost = function(article_rev){
+  $scope.removePost = function(article_id){
   
-    $http.delete("/article/" + article_rev);
+    $http.delete("/article/" + article_id);
   };
 
 });

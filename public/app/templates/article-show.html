@@ -1,6 +1,27 @@
+
+      <!-- NavBar -->
+<div class="navbar navbar-fixed-top navbar-inverse">
+  <div class="navbar-inner">
+    <div class="container">
+      <a href="/home" class="brand">Idea Blog</a>
+      <ul class="nav pull-right">
+        <li>
+          <a ng-click="logout()">Logout</a>
+        </li>
+        <li><a href="/dashboard">{{user}}</a> <!-- this will become a link to the user home -->
+        </li>
+        <li>User Img Go here
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+    <!-- Main Article View -->
+
 <div class='container'>
-  
+
   <h2>{{article.title}}</h2>
-  HELLO WORLD
-  {{article.body}}
+  
+  <p class="hero-unit">{{article.body}}</p>
 </div>

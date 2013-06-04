@@ -43,13 +43,9 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
 //    deleted.
 ///////////////////////////////////////////////////////////////////////////////
   
-
-
-
-
-  $scope.removePost = function(article_rev){
+  $scope.removePost = function(article_id){
   
-    $http.delete("/article/" + article_rev);
+    $http.delete("/article/" + article_id);
   };
 
 });
