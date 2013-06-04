@@ -4,11 +4,7 @@
       <a href="/home" class="brand">Idea Blog</a>
       <ul class="nav pull-right">
         <li>
-          <button class="btn btn-primary btn-small span2" ng-click="login()">Login</button>
-        </li>
-        <li><a>{{user}}</a> <!-- this will become a link to the user home -->
-        </li>
-        <li>User Img Go here
+          <button class="btn btn-primary btn-mini span2" ng-click="login()">Login</button>
         </li>
       </ul>
     </div>
@@ -29,12 +25,14 @@
     <form class="well" name="form">
       <legend>Register</legend>
       <p>Sign Up now and get started blogging...</p>
+
       <div class="control-group">
         <label class="control-label">Email</label>
         <div class="controls">
           <input class="span4" type="email" ng-model="user.email">
         </div>
       </div>
+      
       <div class="control-group">
         <label class="control-label">Username</label>
         <div class="controls">

@@ -38,5 +38,8 @@ angular.module('App', ['ui.bootstrap', 'ui.codemirror', 'http-auth-interceptor']
         controller: 'ArticleCtrl', 
         templateUrl: '/app/templates/article.html'
       })
+      .otherwise({
+        redirectTo: ('/')
+      })
     ;
   });

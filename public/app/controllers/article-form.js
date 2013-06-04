@@ -15,30 +15,14 @@ angular.module('App').controller('ArticleNewCtrl', function($scope, $location, $
     article.slug = article.title.toLowerCase().replace(' ', '-');
     $http.post('/api/article', article)
       .success(function(article) {
-        // alert success
       $location.path('/dashboard');
-      //alerts.push({type: 'success', msg: 'Successfully added article!'});
+      alerts.push({type: 'success', msg: 'Successfully added article!'});
     })
     .error(function(err) {
-      // alert err
-      //alerts.push({type: 'error', msg: 'Error: ' + err.error +'!'});
+    alerts.push({type: 'error', msg: 'Error: ' + err.error +'!'});
     });
-};
-
-/*
-  $scope.save = function(article) {
-    console.log($routeParams);
-    $http.put('/api/article/', article)
-      .success(function(article) {
-        $location.path('/dashboard');
-      })
-      .error(function(err) {
-        // alert err
-
-      });
-    console.log(article);
   };
-*/
+
 
   $scope.cancel = function() {
     $location.path('/dashboard');

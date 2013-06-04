@@ -22,17 +22,21 @@
   <h2>Dashboard</h2>
   <ul style="list-style: none;">
     <li class="media" ng-repeat="article in articles | orderBy: publishedAt">
+      <!-- Edit article -->
       <a class="pull-right" ng-href="/article/{{article._id}}/edit">
         <i class="icon-pencil"></i>
         Edit
       </a>
 
-      <!-- <a class="pull-right" hg-href="/article/{{article._id}}">
-        <i class="icon-remove"> -->
+
       <a ng-href="/article/{{article._id}}">{{article.title}}</a>
       <small>Published by {{article.author}} on {{article.publishedAt | date}}</small>
-      <a class="pull-right" ng-href="" ng-click='removePost()'>Delete</a>
-      
+
+      <!-- Delete Article -->
+{{article}}
+      <a class="pull-right" ng-click='removePost(article._rev)'><i class="icon-trash"></i>Delete
+      </a>
+
 
       <div class='hero-unit' ng-bind-html-unsafe="article.body"></div>
     </li>

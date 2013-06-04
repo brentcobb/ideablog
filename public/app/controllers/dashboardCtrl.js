@@ -1,4 +1,4 @@
-angular.module('App').controller('DashboardCtrl', function($scope, $http, $location, $_) {
+angular.module('App').controller('DashboardCtrl', function($scope, $http, $location, $_, $routeParams) {
   
 //////////////    Retriever   /////////////////////////////////////////////////
 //
@@ -9,16 +9,18 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
     $scope.articles = $_(data.rows).pluck('value');
   });
 
+
+
 //////////////    Logout function   ///////////////////////////////////////////
 //
-//    This function logs the user out.  Will turn into factory to reduce
+//    This function logs the user out.  Will turn into factory to reduce 
 //    duplicate code at a later date, as I want to have a logout button in
 //    more than one place.
 ///////////////////////////////////////////////////////////////////////////////
 
   $scope.logout = function() {
     $http.post('/api/logout').success(function(data) {
-      //alerts.push({type: 'success', msg: 'Successfully logged out.'});
+      alerts.push({type: 'success', msg: 'Successfully logged out.'});
       $location.path('/');
     });
   };
@@ -31,13 +33,20 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
 
   $scope.mode = 'New';
   $http.get('/api/session').success(function(data) {
-    console.log(data);
     $scope.user = data.user;
   });
 
+  //test area
 
-  $scope.removePost = function () {
-    $http.delete('/api/_id')
+
+  
+
+
+
+
+  $scope.removePost = function(article_rev){
+  
+    $http.delete("/article/" + article_rev);
   }
 
 });

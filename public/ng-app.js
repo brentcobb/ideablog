@@ -38,10 +38,21 @@ angular.module('App', ['ui.bootstrap', 'ui.codemirror', 'http-auth-interceptor']
         controller: 'ArticleCtrl', 
         templateUrl: '/app/templates/article.html'
       })
+      .otherwise({
+        redirectTo: ('/')
+      })
     ;
   });
 angular.module('App').value('alerts', []);
 angular.module('App').value('$markdown', markdown);
+/*app.filter('mdImage', function() {
+  return function(input) {
+    if (input) {
+      return ['![',input.name, '](/uploads/',input.path,')'].join('');
+    }
+  };
+});
+*/
 angular.module('App').value('$moment', moment);
 angular.module('App').value('$_', _);
 angular.module('App').directive('uploadButton', function($parse, $compile) {
@@ -90,6 +101,9 @@ angular.module('App').controller('LoginCtrl', function($scope, $http, $location,
   };
 
 });
+angular.module('App').controller('alertCtrl', function($scope, $http, $location, $_, $routeParams) {
+
+});
 angular.module('App').controller('ArticleEditCtrl', function($scope, $http, $routeParams, $location) {
   $scope.mode = 'Edit';
 
@@ -135,30 +149,14 @@ angular.module('App').controller('ArticleNewCtrl', function($scope, $location, $
     article.slug = article.title.toLowerCase().replace(' ', '-');
     $http.post('/api/article', article)
       .success(function(article) {
-        // alert success
       $location.path('/dashboard');
-      //alerts.push({type: 'success', msg: 'Successfully added article!'});
+      alerts.push({type: 'success', msg: 'Successfully added article!'});
     })
     .error(function(err) {
-      // alert err
-      //alerts.push({type: 'error', msg: 'Error: ' + err.error +'!'});
+    alerts.push({type: 'error', msg: 'Error: ' + err.error +'!'});
     });
-};
-
-/*
-  $scope.save = function(article) {
-    console.log($routeParams);
-    $http.put('/api/article/', article)
-      .success(function(article) {
-        $location.path('/dashboard');
-      })
-      .error(function(err) {
-        // alert err
-
-      });
-    console.log(article);
   };
-*/
+
 
   $scope.cancel = function() {
     $location.path('/dashboard');
@@ -188,14 +186,14 @@ angular.module('App').controller('ArticleCtrl', function($scope, $http, $routePa
 });
 angular.module('App').controller('ArticleShowCtrl', function($scope, $http, $routeParams, $location, $_) {
 
-  $http.get('/api/article').success(function(data) {
-    $scope.articles = $_(data.rows).pluck('value');
+  $http.get('/api/article/' + article._id).success(function(data) {
+    $scope.article = $_(data.rows).pluck('value');
   });
 
   
 
 });
-angular.module('App').controller('DashboardCtrl', function($scope, $http, $location, $_) {
+angular.module('App').controller('DashboardCtrl', function($scope, $http, $location, $_, $routeParams) {
   
 //////////////    Retriever   /////////////////////////////////////////////////
 //
@@ -206,16 +204,18 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
     $scope.articles = $_(data.rows).pluck('value');
   });
 
+
+
 //////////////    Logout function   ///////////////////////////////////////////
 //
-//    This function logs the user out.  Will turn into factory to reduce
+//    This function logs the user out.  Will turn into factory to reduce 
 //    duplicate code at a later date, as I want to have a logout button in
 //    more than one place.
 ///////////////////////////////////////////////////////////////////////////////
 
   $scope.logout = function() {
     $http.post('/api/logout').success(function(data) {
-      //alerts.push({type: 'success', msg: 'Successfully logged out.'});
+      alerts.push({type: 'success', msg: 'Successfully logged out.'});
       $location.path('/');
     });
   };
@@ -228,9 +228,21 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
 
   $scope.mode = 'New';
   $http.get('/api/session').success(function(data) {
-    console.log(data);
     $scope.user = data.user;
   });
+
+  //test area
+
+
+  
+
+
+
+
+  $scope.removePost = function(article_rev){
+  
+    $http.delete("/article/" + article_rev);
+  }
 
 });
 
