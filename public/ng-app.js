@@ -132,25 +132,25 @@ angular.module('App').controller('ArticleEditCtrl', function($scope, $http, $rou
   };
 
 });
-angular.module('App').controller('ArticleNewCtrl', function($scope, $location, $http,  $moment, $routeParams) {
+angular.module('App').controller('ArticleNewCtrl', 
+  function($scope, $location, $http,  $moment, $routeParams) {
   
   $scope.article = {};
 
-
 //////////////    Saver   /////////////////////////////////////////////////////
 //
-//    This function saves the article.  Not sure if this should be in the 
-//    dashboard ctrl.  I added it to the article-form.js and it worked great.
+//    This function saves the article. I added it to the article-form.js and it worked great.
 //    I am going to comment it out for the time being.  
 ///////////////////////////////////////////////////////////////////////////////
 
   $scope.save = function(article) {
     article.type = 'article';
+    article._deleted = false;
     article.slug = article.title.toLowerCase().replace(' ', '-');
     $http.post('/api/article', article)
       .success(function(article) {
       $location.path('/dashboard');
-      alerts.push({type: 'success', msg: 'Successfully added article!'});
+      //alerts.push({type: 'success', msg: 'Successfully added article!'});
     })
     .error(function(err) {
     //alerts.push({type: 'error', msg: 'Error: ' + err.error +'!'});
@@ -163,6 +163,9 @@ angular.module('App').controller('ArticleNewCtrl', function($scope, $location, $
   };
 
 
+  $scope.article.attachment = function(article_rev) {
+    $http.post('/api/article/attachment/'+ article_rev);
+  };
 
  /* $scope.$watch('article.title', function(){
     console.log($scope.article.title);
@@ -238,7 +241,7 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
 
   $scope.logout = function() {
     $http.post('/api/logout').success(function(data) {
-      alerts.push({type: 'success', msg: 'Successfully logged out.'});
+      //alerts.push({type: 'success', msg: 'Successfully logged out.'});
       $location.path('/');
     });
   };
@@ -259,12 +262,29 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
 //    Working on a function to delete posts.  I think i have it set up correct.
 //    I just need to make the articles show correctly so that they can be 
 //    deleted.
+//
+//    The hidePost works, after clicking the button you must refresh the page
+//    for the hiding to work.  
 ///////////////////////////////////////////////////////////////////////////////
   
-  $scope.removePost = function(article_id){
-  
-    $http.delete("/article/" + article_id);
+  $scope.hidePost = function(article) {
+    article._deleted = true;
+      $http.post('/api/article', article);
   };
+
+
+
+
+
+
+
+/*
+  $scope.removePost = function(article_rev , article_id){
+    $http.get("/api/article/" + article_id).success(function() {
+      $http.delete("/api/article/" + article_id);
+    });
+    /*$http.delete("/article/" + article_id);
+  };*/
 
 });
 

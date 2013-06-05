@@ -38,13 +38,17 @@
 
       <!-- Pubished date and author -->
 
-      <small>Published by {{article.author}} on {{article.publishedAt | date}}</small>
+      <small>Published by (authorname will go here){{article.author}} on {{article.publishedAt | date}}</small>
 
       <!-- Delete Article -->
 {{article}}
-      <a class="pull-right" ng-click='removePost(article._id)'><i class="icon-trash"></i>Delete
+      <a class="pull-right" ng-click='removePost(article._rev , article._id)'><i class="icon-trash"></i>Delete
       </a>
 
+      <!-- Hide Article -->
+
+      <a class="pull-right" ng-click='hidePost(article)'><i class="icon-trash"></i>Hide
+      </a>
 
       <div class='hero-unit' ng-bind-html-unsafe="article.body"></div>
     </li>

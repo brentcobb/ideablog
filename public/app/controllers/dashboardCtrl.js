@@ -20,7 +20,7 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
 
   $scope.logout = function() {
     $http.post('/api/logout').success(function(data) {
-      alerts.push({type: 'success', msg: 'Successfully logged out.'});
+      //alerts.push({type: 'success', msg: 'Successfully logged out.'});
       $location.path('/');
     });
   };
@@ -41,11 +41,28 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
 //    Working on a function to delete posts.  I think i have it set up correct.
 //    I just need to make the articles show correctly so that they can be 
 //    deleted.
+//
+//    The hidePost works, after clicking the button you must refresh the page
+//    for the hiding to work.  
 ///////////////////////////////////////////////////////////////////////////////
   
-  $scope.removePost = function(article_id){
-  
-    $http.delete("/article/" + article_id);
+  $scope.hidePost = function(article) {
+    article._deleted = true;
+      $http.post('/api/article', article);
   };
+
+
+
+
+
+
+
+/*
+  $scope.removePost = function(article_rev , article_id){
+    $http.get("/api/article/" + article_id).success(function() {
+      $http.delete("/api/article/" + article_id);
+    });
+    /*$http.delete("/article/" + article_id);
+  };*/
 
 });
