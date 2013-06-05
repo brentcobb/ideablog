@@ -137,10 +137,10 @@ angular.module('App').controller('ArticleNewCtrl',
   
   $scope.article = {};
 
-  $scope.mode = 'New';
+  /*$scope.mode = 'New';
   $http.get('/api/session').success(function(data) {
     $scope.article.author = data.user;
-  });
+  });*/
 
 //////////////    Saver   /////////////////////////////////////////////////////
 //
@@ -149,6 +149,13 @@ angular.module('App').controller('ArticleNewCtrl',
 ///////////////////////////////////////////////////////////////////////////////
 
   $scope.save = function(article) {
+    
+    $scope.article.author = function() {
+      $scope.mode = 'New';
+      $http.get('/api/session').success(function(data) {
+        article.author = data.user;
+        });
+      };
     article.type = 'article';
     article._deleted = false;
     article.slug = article.title.toLowerCase().replace(' ', '-');
@@ -168,21 +175,10 @@ angular.module('App').controller('ArticleNewCtrl',
     $location.path('/dashboard');
   };
 
-//////////////    Username Retrieval    ///////////////////////////////////////
-//
-//    This function deternimes the currently logged in user.  
-///////////////////////////////////////////////////////////////////////////////
-
-
-  $scope.mode = 'New';
-  $http.get('/api/session').success(function(data) {
-    $scope.user = data.user;
-  });
-
-
+/*
   $scope.article.attachment = function(article_rev) {
     $http.post('/api/article/attachment/'+ article_rev);
-  };
+  };*/
 
  /* $scope.$watch('article.title', function(){
     console.log($scope.article.title);
