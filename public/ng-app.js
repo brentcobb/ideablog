@@ -137,6 +137,11 @@ angular.module('App').controller('ArticleNewCtrl',
   
   $scope.article = {};
 
+  $scope.mode = 'New';
+  $http.get('/api/session').success(function(data) {
+    $scope.article.author = data.user;
+  });
+
 //////////////    Saver   /////////////////////////////////////////////////////
 //
 //    This function saves the article. I added it to the article-form.js and it worked great.
@@ -163,7 +168,16 @@ angular.module('App').controller('ArticleNewCtrl',
     $location.path('/dashboard');
   };
 
+//////////////    Username Retrieval    ///////////////////////////////////////
+//
+//    This function deternimes the currently logged in user.  
+///////////////////////////////////////////////////////////////////////////////
 
+
+  $scope.mode = 'New';
+  $http.get('/api/session').success(function(data) {
+    $scope.user = data.user;
+  });
 
 
   $scope.article.attachment = function(article_rev) {
