@@ -16,6 +16,7 @@
           ng-model="article.body"></textarea>
       </div>
     </div>
+
     <div class="control-group">
       <label class="control-label">Published</label>
       <!-- list attachments doc name should be slug... -->
@@ -23,6 +24,15 @@
         <input type="text" ui-date ng-model="article.publishedAt">
       </div>
     </div>
+
+    <div class="control-group">
+      <label class="control-label">Tags</label>
+      <div class="controls">
+        <input type="text" ng-model="article.tags">
+      </div>
+    </div>
+
+
     <div class="control-group pull-right">
       <button class="btn btn-warning btn-large" ng-click="cancel()">
         <i class="icon-remove"></i>

@@ -13,6 +13,7 @@ angular.module('App').controller('ArticleNewCtrl',
     article.type = 'article';
     article._deleted = false;
     article.slug = article.title.toLowerCase().replace(' ', '-');
+    article.tags = article.tags.toUpperCase();
     $http.post('/api/article', article)
       .success(function(article) {
       $location.path('/dashboard');
@@ -27,6 +28,8 @@ angular.module('App').controller('ArticleNewCtrl',
   $scope.cancel = function() {
     $location.path('/dashboard');
   };
+
+
 
 
   $scope.article.attachment = function(article_rev) {
