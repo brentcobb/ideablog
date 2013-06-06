@@ -1,4 +1,4 @@
-angular.module('App').controller('DashboardCtrl', function($scope, $http, $location, $_, $routeParams) {
+angular.module('App').controller('DashboardCtrl', function($scope, $http, $location, $_, $routeParams, $markdown, alerts) {
   
 //////////////    Retriever   /////////////////////////////////////////////////
 //
@@ -7,9 +7,8 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
 
   $http.get('/api/article').success(function(data) {
     $scope.articles = $_(data.rows).pluck('value');
+    //$scope.article.html = $markdown.toHTML($scope.article.body);
   });
-
-
 
 //////////////    Logout function   ///////////////////////////////////////////
 //
@@ -20,7 +19,7 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
 
   $scope.logout = function() {
     $http.post('/api/logout').success(function(data) {
-      //alerts.push({type: 'success', msg: 'Successfully logged out.'});
+      alerts.push({type: 'success', msg: 'Successfully logged out.'});
       $location.path('/');
     });
   };
@@ -50,19 +49,5 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
     article._deleted = true;
       $http.post('/api/article', article);
   };
-
-
-
-
-
-
-
-/*
-  $scope.removePost = function(article_rev , article_id){
-    $http.get("/api/article/" + article_id).success(function() {
-      $http.delete("/api/article/" + article_id);
-    });
-    /*$http.delete("/article/" + article_id);
-  };*/
 
 });

@@ -1,0 +1,4 @@
+block not logged in users from being able to see things only logged in users can see
+
+make alerts prompt for when things do not work.
+

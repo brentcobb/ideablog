@@ -45,14 +45,13 @@ angular.module('App', ['ui.bootstrap', 'ui.codemirror', 'http-auth-interceptor']
   });
 angular.module('App').value('alerts', []);
 angular.module('App').value('$markdown', markdown);
-/*app.filter('mdImage', function() {
+angular.module('App').filter('mdImage', function() {
   return function(input) {
     if (input) {
       return ['![',input.name, '](/uploads/',input.path,')'].join('');
     }
   };
 });
-*/
 angular.module('App').value('$moment', moment);
 angular.module('App').value('$_', _);
 angular.module('App').directive('uploadButton', function($parse, $compile) {
@@ -101,8 +100,13 @@ angular.module('App').controller('LoginCtrl', function($scope, $http, $location,
   };
 
 });
-angular.module('App').controller('alertCtrl', function($scope, $http, $location, $_, $routeParams) {
+angular.module('App').controller('alertsCtrl', function($scope, $http, $_) {
+   
+  $scope.alert = {};
 
+  $scope.closeAlert = function(index) {
+    $scope.alerts.splice(index, 1);
+  };
 });
 angular.module('App').controller('ArticleEditCtrl', function($scope, $http, $routeParams, $location) {
   $scope.mode = 'Edit';
@@ -133,7 +137,7 @@ angular.module('App').controller('ArticleEditCtrl', function($scope, $http, $rou
 
 });
 angular.module('App').controller('ArticleNewCtrl', 
-  function($scope, $location, $http,  $moment, $routeParams) {
+  function($scope, $location, $http,  $moment, $routeParams, alerts) {
   
   $scope.article = {};
 
@@ -142,28 +146,37 @@ angular.module('App').controller('ArticleNewCtrl',
     $scope.article.author = data.user;
   });*/
 
+
+
+//////////////    Username Retrieval    ///////////////////////////////////////
+//
+//    This function deternimes the currently logged in user.  
+///////////////////////////////////////////////////////////////////////////////
+
+
+  $scope.mode = 'New';
+  $http.get('/api/session').success(function(data) {
+    $scope.user = data.user;
+  });
+
+
 //////////////    Saver   /////////////////////////////////////////////////////
 //
-//    This function saves the article. I added it to the article-form.js and it worked great.
-//    I am going to comment it out for the time being.  
+//    This function saves the article. Alerts are currently not working  
 ///////////////////////////////////////////////////////////////////////////////
 
   $scope.save = function(article) {
-    
-    $scope.article.author = function() {
-      $scope.mode = 'New';
-      $http.get('/api/session').success(function(data) {
-        article.author = data.user;
-        });
-      };
+    article.author = $scope.user;
     article.type = 'article';
     article._deleted = false;
+    console.log(article);
+    article.publishedAt = moment().format('MMMM Do YYYY, h:mm:ss a');
     article.slug = article.title.toLowerCase().replace(' ', '-');
     article.tags = article.tags.toUpperCase();
     $http.post('/api/article', article)
       .success(function(article) {
+      alerts.push({type: 'success', msg: 'Successfully added article!'});
       $location.path('/dashboard');
-      //alerts.push({type: 'success', msg: 'Successfully added article!'});
     })
     .error(function(err) {
     //alerts.push({type: 'error', msg: 'Error: ' + err.error +'!'});
@@ -232,7 +245,7 @@ angular.module('App').controller('ArticleShowCtrl', function($scope, $http, $rou
 
 
 });
-angular.module('App').controller('DashboardCtrl', function($scope, $http, $location, $_, $routeParams) {
+angular.module('App').controller('DashboardCtrl', function($scope, $http, $location, $_, $routeParams, $markdown, alerts) {
   
 //////////////    Retriever   /////////////////////////////////////////////////
 //
@@ -241,9 +254,8 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
 
   $http.get('/api/article').success(function(data) {
     $scope.articles = $_(data.rows).pluck('value');
+    //$scope.article.html = $markdown.toHTML($scope.article.body);
   });
-
-
 
 //////////////    Logout function   ///////////////////////////////////////////
 //
@@ -254,7 +266,7 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
 
   $scope.logout = function() {
     $http.post('/api/logout').success(function(data) {
-      //alerts.push({type: 'success', msg: 'Successfully logged out.'});
+      alerts.push({type: 'success', msg: 'Successfully logged out.'});
       $location.path('/');
     });
   };
@@ -284,20 +296,6 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
     article._deleted = true;
       $http.post('/api/article', article);
   };
-
-
-
-
-
-
-
-/*
-  $scope.removePost = function(article_rev , article_id){
-    $http.get("/api/article/" + article_id).success(function() {
-      $http.delete("/api/article/" + article_id);
-    });
-    /*$http.delete("/article/" + article_id);
-  };*/
 
 });
 

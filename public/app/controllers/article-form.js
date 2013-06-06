@@ -1,5 +1,5 @@
 angular.module('App').controller('ArticleNewCtrl', 
-  function($scope, $location, $http,  $moment, $routeParams) {
+  function($scope, $location, $http,  $moment, $routeParams, alerts) {
   
   $scope.article = {};
 
@@ -8,28 +8,37 @@ angular.module('App').controller('ArticleNewCtrl',
     $scope.article.author = data.user;
   });*/
 
+
+
+//////////////    Username Retrieval    ///////////////////////////////////////
+//
+//    This function deternimes the currently logged in user.  
+///////////////////////////////////////////////////////////////////////////////
+
+
+  $scope.mode = 'New';
+  $http.get('/api/session').success(function(data) {
+    $scope.user = data.user;
+  });
+
+
 //////////////    Saver   /////////////////////////////////////////////////////
 //
-//    This function saves the article. I added it to the article-form.js and it worked great.
-//    I am going to comment it out for the time being.  
+//    This function saves the article. Alerts are currently not working  
 ///////////////////////////////////////////////////////////////////////////////
 
   $scope.save = function(article) {
-    
-    $scope.article.author = function() {
-      $scope.mode = 'New';
-      $http.get('/api/session').success(function(data) {
-        article.author = data.user;
-        });
-      };
+    article.author = $scope.user;
     article.type = 'article';
     article._deleted = false;
+    console.log(article);
+    article.publishedAt = moment().format('MMMM Do YYYY, h:mm:ss a');
     article.slug = article.title.toLowerCase().replace(' ', '-');
     article.tags = article.tags.toUpperCase();
     $http.post('/api/article', article)
       .success(function(article) {
+      alerts.push({type: 'success', msg: 'Successfully added article!'});
       $location.path('/dashboard');
-      //alerts.push({type: 'success', msg: 'Successfully added article!'});
     })
     .error(function(err) {
     //alerts.push({type: 'error', msg: 'Error: ' + err.error +'!'});
