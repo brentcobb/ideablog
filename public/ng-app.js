@@ -143,6 +143,7 @@ angular.module('App').controller('ArticleEditCtrl', function($scope, $http, $rou
   });
 
   $scope.save = function(article) {
+    article.tags = article.tags.toUpperCase();
     $http.put('/api/article/' + $routeParams.id, article)
       .success(function(article) {
         $location.path('/dashboard');
