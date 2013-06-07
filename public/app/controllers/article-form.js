@@ -26,10 +26,12 @@ angular.module('App').controller('ArticleNewCtrl',
     article.tags = article.tags.toUpperCase();
     $http.post('/api/article', article)
       .success(function(article) {
+        window.alert('You have successfully uploaded your article!');
       //alerts.push({type: 'success', msg: 'Successfully added article!'});
       $location.path('/dashboard');
     })
     .error(function(err) {
+      window.alert('I did not know you could break it this way.  Thanks for finding new bugs!');
     //alerts.push({type: 'error', msg: 'Error: ' + err.error +'!'});
     });
   };

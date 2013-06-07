@@ -1,4 +1,4 @@
-angular.module('App').controller('ArticleShowCtrl', function($scope, $http, $routeParams, $location, $_) {
+angular.module('App').controller('ArticleShowCtrl', function($scope, $http, $routeParams, $location) {
 
 //////////////    Username Retrieval    ///////////////////////////////////////
 //

@@ -2,24 +2,23 @@
   <div class="navbar-inner">
     <div class="container">
       <a href="/home" class="brand">Idea Blog</a>
-      
       <ul class="nav pull-left">
         <li>
           <p class="searchbar">Search: <input ng-model="query"></p>
         </li>
       </ul>
-      
       <ul class="nav pull-right">
         <li>
           <a ng-click="logout()">Logout</a>
         </li>
-        <li><a ng-href="/{{user}}/settings">{{user}}</a> <!-- this will become a link to the user home -->
+        <li><a ng-href="/dashboard">{{user}}</a> 
         </li>
       </ul>
-    
     </div>
   </div>
 </div>
+
+
 <div class="container">
 
     <!-- New Article Btn -->
@@ -30,7 +29,7 @@
   </a>
   <h2>Dashboard</h2>
   <ul style="list-style: none;">
-    <li class="media" ng-repeat="article in articles | filter:trashCheck | orderBy: publishedAt">
+    <li class="media" ng-repeat="article in articles | filter:query | filter:trashCheck | orderBy: publishedAt">
      
       <!-- Edit article -->
       <a class="pull-right" ng-href="/article/{{article._id}}/edit">
@@ -45,12 +44,11 @@
       <!-- Pubished date and author -->
 
       <small>Published by {{article.author}} on {{article.publishedAt | date}} Tags: {{article.tags}}</small>
-
-<!-- {{article}} -->
       
       <!-- Hide Article -->
-{{article}}
-      <a class="pull-right" ng-click='hidePost(article)'><i class="icon-trash"></i>Trash
+      <a class="pull-right" ng-click='hidePost(article)'>
+        <i class="icon-trash"></i>
+        Trash
       </a>
 
       <div class='hero-unit' ng-bind-html-unsafe="article.body"></div>

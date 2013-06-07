@@ -13,26 +13,22 @@
         <li>
           <a ng-click="logout()">Logout</a>
         </li>
-        <li><a ng-href="/{{user}}/settings">{{user}}</a> <!-- this will become a link to the user home -->
+        <li><a ng-href="/dashboard">{{user}}</a>
         </li>
       </ul>
     
     </div>
   </div>
 </div>
-
-
-
-
-
 <div class="container">
   <div>
-    <h3>{{user}}</h3>
+    <h3>{{user}}'s Blog</h3>
   </div>
   <article class="offset1" ng-repeat="article in articles | filter:query | orderBy: 'publishedAt' ">
     <header>
-      <h2>{{article.title}}</h2>
+      <a href="/article/{{article._id}}"><h2>{{article.title}}</h2></a>
+      <small>Published on {{article.publishedAt | date}} Tags: {{article.tags}}</small>
     </header>
-    <div class="hero-unit" ng-bind-html-unsafe="article.body | markdown"></div>
+    <div class="hero-unit" ng-bind-html-unsafe="article.body"></div>
   </article>
 </div>

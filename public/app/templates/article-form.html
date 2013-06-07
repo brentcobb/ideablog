@@ -2,29 +2,18 @@
   <div class="navbar-inner">
     <div class="container">
       <a href="/home" class="brand">Idea Blog</a>
-      
-    <!--   <ul class="nav pull-left">
-        <li>
-          <p>Search: <input ng-model="query"></p>
-        </li>
-      </ul> -->
-      
       <ul class="nav pull-right">
         <li>
           <a ng-click="logout()">Logout</a>
         </li>
-        <li><a>{{user}}</a> <!-- this will become a link to the user home -->
-        </li>
         <li>
+          <a href="/dashboard">{{user}}</a>
         </li>
       </ul>
-    
     </div>
   </div>
 </div>
 <div class="container">
-
-
 <div class="container">
   <form>
     <legend>{{mode}} Article</legend>
@@ -32,12 +21,12 @@
       <label class="control-label">Title</label>
       <div class="controls">
         <input class="span10 title" type="text" ng-model="article.title" required>
-        <div>{{article.slug}}</div>
+        <div class="invisible">{{article.slug}}</div>
       </div>
     </div>
     <div class="control-group">
       <label class="control-label">Body</label>
-      <div class="help-block">Separate Leader from rest of body using the <code>&lt;!-- more --&gt;</code> element</div>
+      <div class="help-block"><small>Currently this form only works with plain text and HTML style markup, but we plan on changing that in the future.</small></div>
       <div class="controls">
         <textarea class="body" ui-codemirror="{theme: 'monokai', mode: 'markdown'}" 
           ng-model="article.body"></textarea>
@@ -46,7 +35,6 @@
 
     <div class="control-group">
       <label class="control-label"></label>
-      <!-- list attachments doc name should be slug... -->
       <div class="controls">
         <input class="invisible" type="text" ui-date ng-model="article.publishedAt">
       </div>
@@ -74,14 +62,13 @@
   </form>
 </div>
 
-<div class="control-group">
+<!-- <div class="control-group">
   <label class="control-label">Attachments</label>
   <ul>
     <li ng-repeat="image in article.images">
-      <!-- <code>{{image | mdImage}}</code> -->
+      {{image | mdImage}}
     </li>
   </ul>
-  list attachments doc name should be slug...
   <div class="controls">
     <upload-button 
       class="btn btn-large"
@@ -91,4 +78,4 @@
       Upload Image
     </upload-button>
   </div>
-</div>
+</div> -->

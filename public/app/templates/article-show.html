@@ -3,12 +3,12 @@
 <div class="navbar navbar-fixed-top navbar-inverse">
   <div class="navbar-inner">
     <div class="container">
-      <a href="/dashboard" class="brand">Idea Blog</a>
+      <a href="/home" class="brand">Idea Blog</a>
       <ul class="nav pull-right">
         <li>
           <a ng-click="logout()">Logout</a>
         </li>
-        <li><a href="/dashboard">{{user}}</a> <!-- this will become a link to the user home -->
+        <li><a href="/dashboard">{{user}}</a> 
         </li>
       </ul>
     </div>
@@ -20,6 +20,6 @@
 <div class='container'>
 
   <h2>{{article.title}}</h2>
-  
+  <small>Published by {{article.author}} on {{article.publishedAt | date}} Tags: {{article.tags}}</small>
   <p class="hero-unit">{{article.body}}</p>
 </div>

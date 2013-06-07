@@ -44,42 +44,12 @@ angular.module('App', ['ui.bootstrap', 'ui.codemirror', 'http-auth-interceptor']
       })
       .otherwise({
         redirectTo: ('/')
-      })
-    ;
+      });
+    
   });
-
-
-/* services.js */
-
-// don't forget to declare this service module as a dependency in your main app constructor!
-var appServices = angular.module('appApp.services', []);
-
-appServices.factory('alertService', function($rootScope) {
-    var alertService = {};
-
-    // create an array of alerts available globally
-    $rootScope.alerts = [];
-
-    alertService.add = function(type, msg) {
-      $rootScope.alerts.push({'type': type, 'msg': msg});
-    };
-
-    alertService.closeAlert = function(index) {
-      $rootScope.alerts.splice(index, 1);
-    };
-
-    return alertService;
-  });
-
+/*
+ angular.module('App').constant($alerts, []);*/
 angular.module('App').value('$markdown', markdown);
-angular.module('App').filter('mdImage', function() {
-  return function(input) {
-    if (input) {
-      return ['![',input.name, '](/uploads/',input.path,')'].join('');
-    }
-  };
-});
-
 angular.module('App').value('$moment', moment);
 angular.module('App').value('$_', _);
 angular.module('App').filter('mdImage', function() {
@@ -137,9 +107,6 @@ angular.module('App').controller('LoginCtrl', function($scope, $http, $location,
 });
 angular.module('App').controller('SettingsCtrl', function($scope, $http, $routeParams, $location) {
 
-
-});
-angular.module('App').controller('alertCtrl', function($scope, $http, $location, $_, $routeParams) {
 
 });
 angular.module('App').controller('alertsCtrl', function($scope, $http, $_) {
@@ -206,10 +173,12 @@ angular.module('App').controller('ArticleNewCtrl',
     article.tags = article.tags.toUpperCase();
     $http.post('/api/article', article)
       .success(function(article) {
+        window.alert('You have successfully uploaded your article!');
       //alerts.push({type: 'success', msg: 'Successfully added article!'});
       $location.path('/dashboard');
     })
     .error(function(err) {
+      window.alert('I did not know you could break it this way.  Thanks for finding new bugs!');
     //alerts.push({type: 'error', msg: 'Error: ' + err.error +'!'});
     });
   };
@@ -238,7 +207,7 @@ angular.module('App').controller('ArticleCtrl', function($scope, $http, $routePa
     });
 
 });
-angular.module('App').controller('ArticleShowCtrl', function($scope, $http, $routeParams, $location, $_) {
+angular.module('App').controller('ArticleShowCtrl', function($scope, $http, $routeParams, $location) {
 
 //////////////    Username Retrieval    ///////////////////////////////////////
 //
@@ -270,17 +239,43 @@ angular.module('App').controller('ArticleShowCtrl', function($scope, $http, $rou
 
 
 });
-angular.module('App').controller('DashboardCtrl', function($scope, $http, $location, $_, $routeParams, $markdown) {
+angular.module('App').controller('DashboardCtrl', function($scope, $http, $location, $_, $markdown) {
   
 //////////////    Retriever   /////////////////////////////////////////////////
 //
 //    This function gets articles stored in couchdb posted by logged in user
 ///////////////////////////////////////////////////////////////////////////////
-
   $http.get('/api/article').success(function(data) {
     $scope.articles = $_(data.rows).pluck('value');
   });
-
+//////////////    Logout function   ///////////////////////////////////////////
+//
+//    This function logs the user out.  Will turn into factory to reduce 
+//    duplicate code at a later date, as I want to have a logout button in
+//    more than one place.
+///////////////////////////////////////////////////////////////////////////////
+  $scope.logout = function() {
+    $http.post('/api/logout').success(function(data) {
+     //alerts.push({type: 'success', msg: 'Successfully logged out.'});
+      $location.path('/');
+    });
+  };
+//////////////    Username Retrieval    ///////////////////////////////////////
+//
+//    This function deternimes the currently logged in user.  
+///////////////////////////////////////////////////////////////////////////////
+  $http.get('/api/session').success(function(data) {
+    $scope.user = data.user;
+  });
+//////////////    Hide Articles   /////////////////////////////////////////////
+//
+//    The hidePost works, after clicking the button you must refresh the page
+//    for the hiding to work.  
+/////////////////////////////////////////////////////////////////////////////// 
+  $scope.hidePost = function(article) {
+    article._deleted = true;
+      $http.post('/api/article', article);
+  };
 //////////////    TrashChecker    /////////////////////////////////////////////
 //
 //    This is used in a filter to check each article in the ng-repeat
@@ -288,56 +283,13 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
 //    If the article does not have said field it is removed from view.  T
 //    his is used to avoid refreshing the page to see articles be removed.
 ///////////////////////////////////////////////////////////////////////////////
-
   $scope.trashCheck = function(article) {
     return !article.hasOwnProperty('_deleted');
   };
-
-//////////////    Logout function   ///////////////////////////////////////////
-//
-//    This function logs the user out.  Will turn into factory to reduce 
-//    duplicate code at a later date, as I want to have a logout button in
-//    more than one place.
-///////////////////////////////////////////////////////////////////////////////
-
-  $scope.logout = function() {
-    $http.post('/api/logout').success(function(data) {
-     //alerts.push({type: 'success', msg: 'Successfully logged out.'});
-      $location.path('/');
-    });
-  };
-
-//////////////    Username Retrieval    ///////////////////////////////////////
-//
-//    This function deternimes the currently logged in user.  
-///////////////////////////////////////////////////////////////////////////////
-
-  $http.get('/api/session').success(function(data) {
-    $scope.user = data.user;
-  });
-
-//////////////    Hide Articles   /////////////////////////////////////////////
-//
-//    The hidePost works, after clicking the button you must refresh the page
-//    for the hiding to work.  
-///////////////////////////////////////////////////////////////////////////////
-  
-  $scope.hidePost = function(article) {
-    article._deleted = true;
-      $http.post('/api/article', article);
-  };
-
 });
 
-angular.module('App').controller('HomeCtrl', function($scope, $routeParams, $http, $markdown, $_, alerts, $location) {
+angular.module('App').controller('HomeCtrl', function($scope, $routeParams, $http, $markdown, $_, $location) {
   
-/*  $scope.user = $routeParams.user;
-  $http.get('/api/article/' + $routeParams.user + '/all')
-    .success(function(data) {
-      $scope.articles = $_(data.rows).pluck('value');
-    });*/
-
-  $scope.mode = 'New';
   $http.get('/api/session').success(function(data) {
     $scope.user = data.user;
   });
@@ -356,7 +308,7 @@ angular.module('App').controller('HomeCtrl', function($scope, $routeParams, $htt
 
   $scope.logout = function() {
     $http.post('/api/logout').success(function(data) {
-      alerts.push({type: 'success', msg: 'Successfully logged out.'});
+      //alerts.push({type: 'success', msg: 'Successfully logged out.'});
       $location.path('/');
     });
   };
@@ -388,9 +340,12 @@ angular.module('App').controller('SignupCtrl', function($scope, $http, $location
   $scope.register = function(user) {
     $http.post('/api/signup', user)
       .success(function(user) {
+      window.alert("Thanks for signing up, now you can login.");
       })
       .error(function(err) {
         // alert error
       });
   };
+
+
 });

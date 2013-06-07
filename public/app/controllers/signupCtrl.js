@@ -23,9 +23,12 @@ angular.module('App').controller('SignupCtrl', function($scope, $http, $location
   $scope.register = function(user) {
     $http.post('/api/signup', user)
       .success(function(user) {
+      window.alert("Thanks for signing up, now you can login.");
       })
       .error(function(err) {
         // alert error
       });
   };
+
+
 });

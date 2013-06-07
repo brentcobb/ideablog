@@ -44,6 +44,6 @@ angular.module('App', ['ui.bootstrap', 'ui.codemirror', 'http-auth-interceptor']
       })
       .otherwise({
         redirectTo: ('/')
-      })
-    ;
+      });
+    
   });
