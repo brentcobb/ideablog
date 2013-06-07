@@ -40,13 +40,4 @@ angular.module('App').controller('ArticleNewCtrl',
     $location.path('/dashboard');
   };
 
- /* $scope.$watch('article.title', function(){
-    console.log($scope.article.title);
-  });
-
-   $scope.$watch('article.body', function(){
-    console.log($scope.article.body);
-  });
-*/
-
 });

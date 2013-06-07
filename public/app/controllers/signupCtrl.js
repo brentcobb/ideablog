@@ -1,5 +1,7 @@
 angular.module('App').controller('SignupCtrl', function($scope, $http, $location, $dialog) {
 
+
+
 //////////////  Login Function ////////////////////////////////////////////////
 //
 //    Here is the login function
@@ -24,6 +26,7 @@ angular.module('App').controller('SignupCtrl', function($scope, $http, $location
     $http.post('/api/signup', user)
       .success(function(user) {
       window.alert("Thanks for signing up, now you can login.");
+
       })
       .error(function(err) {
         // alert error

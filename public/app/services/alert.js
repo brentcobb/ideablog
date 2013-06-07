@@ -1,2 +1,2 @@
-/*
- angular.module('App').constant($alerts, []);*/
+
+ angular.module('App').constant('$alerts', []);

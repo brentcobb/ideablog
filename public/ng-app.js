@@ -47,8 +47,8 @@ angular.module('App', ['ui.bootstrap', 'ui.codemirror', 'http-auth-interceptor']
       });
     
   });
-/*
- angular.module('App').constant($alerts, []);*/
+
+ angular.module('App').constant('$alerts', []);
 angular.module('App').value('$markdown', markdown);
 angular.module('App').value('$moment', moment);
 angular.module('App').value('$_', _);
@@ -59,6 +59,20 @@ angular.module('App').filter('mdImage', function() {
     }
   };
 });
+angular.module('App').directive('pwCheck', [function () {
+  return {
+    require: 'ngModel',
+    link: function (scope, elem, attrs, ctrl) {
+      var firstPassword = '#' + attrs.pwCheck;
+      elem.add(firstPassword).on('keyup', function () {
+        scope.$apply(function () {
+          var v = elem.val()===$(firstPassword).val();
+          ctrl.$setValidity('pwmatch', v);
+        });
+      });
+    }
+  };
+}]);
 angular.module('App').directive('uploadButton', function($parse, $compile) {
   return {
     restrict: 'E',
@@ -85,13 +99,13 @@ angular.module('App').directive('uploadButton', function($parse, $compile) {
     }
   };
 });
-angular.module('App').controller('LoginCtrl', function($scope, $http, $location, authService, dialog) {
+angular.module('App').controller('LoginCtrl', function($scope, $http, $location, authService, dialog, $alerts) {
   
   $scope.login = function(user) {
     $http.post('/api/login', user)
       .success(function(user) {
         dialog.close();
-        //alerts.push({type: 'success', msg: 'Successfully logged in.'});
+        $alerts.push({type: 'success', msg: 'Successfully logged in.'});
         authService.loginConfirmed();
       })
       .error(function(err) {
@@ -109,9 +123,8 @@ angular.module('App').controller('SettingsCtrl', function($scope, $http, $routeP
 
 
 });
-angular.module('App').controller('alertsCtrl', function($scope, $http, $_) {
+angular.module('App').controller('alertsCtrl', function($scope, $alerts) {
    
-  $scope.alert = {};
 
   $scope.closeAlert = function(index) {
     $scope.alerts.splice(index, 1);
@@ -186,15 +199,6 @@ angular.module('App').controller('ArticleNewCtrl',
   $scope.cancel = function() {
     $location.path('/dashboard');
   };
-
- /* $scope.$watch('article.title', function(){
-    console.log($scope.article.title);
-  });
-
-   $scope.$watch('article.body', function(){
-    console.log($scope.article.body);
-  });
-*/
 
 });
 angular.module('App').controller('ArticleCtrl', function($scope, $http, $routeParams, $location) {  
@@ -317,6 +321,8 @@ angular.module('App').controller('HomeCtrl', function($scope, $routeParams, $htt
 });
 angular.module('App').controller('SignupCtrl', function($scope, $http, $location, $dialog) {
 
+
+
 //////////////  Login Function ////////////////////////////////////////////////
 //
 //    Here is the login function
@@ -341,6 +347,7 @@ angular.module('App').controller('SignupCtrl', function($scope, $http, $location
     $http.post('/api/signup', user)
       .success(function(user) {
       window.alert("Thanks for signing up, now you can login.");
+
       })
       .error(function(err) {
         // alert error

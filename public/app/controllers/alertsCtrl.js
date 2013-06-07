@@ -1,6 +1,5 @@
-angular.module('App').controller('alertsCtrl', function($scope, $http, $_) {
+angular.module('App').controller('alertsCtrl', function($scope, $alerts) {
    
-  $scope.alert = {};
 
   $scope.closeAlert = function(index) {
     $scope.alerts.splice(index, 1);

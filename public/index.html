@@ -17,10 +17,8 @@
   </head>
   <body>
     <!-- <h1>Idea Blog</h1> -->
+    <div ng-include="'/app/templates/alert.html'"></div>
     <ng-view></ng-view>
-     <!--  <div>
-      <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{ alert.msg }}</alert>
-      </div> -->
     <script src="/components/jquery/jquery.js" type="text/javascript" charset="utf-8"></script>
     <script src="/components/underscore/underscore.js" type="text/javascript" charset="utf-8"></script>
     <script src="/components/moment/moment.js" type="text/javascript" charset="utf-8"></script>
