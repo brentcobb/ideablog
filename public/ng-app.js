@@ -105,13 +105,13 @@ angular.module('App').controller('LoginCtrl', function($scope, $http, $location,
     $http.post('/api/login', user)
       .success(function(user) {
         dialog.close();
-        $alerts.push({type: 'success', msg: 'Successfully logged in.'});
         authService.loginConfirmed();
       })
       .error(function(err) {
         // alert error
       });
     $location.path('/dashboard');
+    $alerts.push({type: 'success', msg: 'Successfully logged in.'});
   };
 
    $scope.cancel = function() {
@@ -123,12 +123,18 @@ angular.module('App').controller('SettingsCtrl', function($scope, $http, $routeP
 
 
 });
-angular.module('App').controller('alertsCtrl', function($scope, $alerts) {
-   
+angular.module('App').controller('AlertsCtrl', function($scope, $alerts) {
+
+$scope.alerts = [];
+
+   $scope.addAlert = function() {
+    $scope.alerts.push({msg: "Another alert!"});
+  };
 
   $scope.closeAlert = function(index) {
     $scope.alerts.splice(index, 1);
   };
+
 });
 angular.module('App').controller('ArticleEditCtrl', function($scope, $http, $routeParams, $location) {
   $scope.mode = 'Edit';
