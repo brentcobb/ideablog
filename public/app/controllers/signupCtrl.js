@@ -1,4 +1,4 @@
-angular.module('App').controller('SignupCtrl', function($scope, $http, $location, $dialog, alerts) {
+angular.module('App').controller('SignupCtrl', function($scope, $http, $location, $dialog) {
 
 //////////////  Login Function ////////////////////////////////////////////////
 //

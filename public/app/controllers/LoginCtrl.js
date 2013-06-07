@@ -1,4 +1,4 @@
-angular.module('App').controller('LoginCtrl', function($scope, $http, $location, authService, dialog, alerts) {
+angular.module('App').controller('LoginCtrl', function($scope, $http, $location, authService, dialog) {
   
   $scope.login = function(user) {
     $http.post('/api/login', user)

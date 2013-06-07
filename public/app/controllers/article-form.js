@@ -1,5 +1,5 @@
 angular.module('App').controller('ArticleNewCtrl', 
-  function($scope, $location, $http,  $moment, $routeParams, alerts) {
+  function($scope, $location, $http,  $moment, $routeParams) {
   
   $scope.article = {};
 
@@ -21,17 +21,16 @@ angular.module('App').controller('ArticleNewCtrl',
   $scope.save = function(article) {
     article.author = $scope.user;
     article.type = 'article';
-    article._deleted = false;
     article.publishedAt = moment().format('MMMM Do YYYY, h:mm:ss a');
     article.slug = article.title.toLowerCase().replace(' ', '-');
     article.tags = article.tags.toUpperCase();
     $http.post('/api/article', article)
       .success(function(article) {
-      alerts.push({type: 'success', msg: 'Successfully added article!'});
+      //alerts.push({type: 'success', msg: 'Successfully added article!'});
       $location.path('/dashboard');
     })
     .error(function(err) {
-    alerts.push({type: 'error', msg: 'Error: ' + err.error +'!'});
+    //alerts.push({type: 'error', msg: 'Error: ' + err.error +'!'});
     });
   };
 

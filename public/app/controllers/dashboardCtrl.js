@@ -1,4 +1,4 @@
-angular.module('App').controller('DashboardCtrl', function($scope, $http, $location, $_, $routeParams, $markdown, alerts) {
+angular.module('App').controller('DashboardCtrl', function($scope, $http, $location, $_, $routeParams, $markdown) {
   
 //////////////    Retriever   /////////////////////////////////////////////////
 //
@@ -9,6 +9,18 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
     $scope.articles = $_(data.rows).pluck('value');
   });
 
+//////////////    TrashChecker    /////////////////////////////////////////////
+//
+//    This is used in a filter to check each article in the ng-repeat
+//    it checks each article for the field '_deleted:false' in the json.
+//    If the article does not have said field it is removed from view.  T
+//    his is used to avoid refreshing the page to see articles be removed.
+///////////////////////////////////////////////////////////////////////////////
+
+  $scope.trashCheck = function(article) {
+    return !article.hasOwnProperty('_deleted');
+  };
+
 //////////////    Logout function   ///////////////////////////////////////////
 //
 //    This function logs the user out.  Will turn into factory to reduce 
@@ -18,7 +30,7 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
 
   $scope.logout = function() {
     $http.post('/api/logout').success(function(data) {
-      alerts.push({type: 'success', msg: 'Successfully logged out.'});
+     //alerts.push({type: 'success', msg: 'Successfully logged out.'});
       $location.path('/');
     });
   };

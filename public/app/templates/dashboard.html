@@ -30,7 +30,7 @@
   </a>
   <h2>Dashboard</h2>
   <ul style="list-style: none;">
-    <li class="media" ng-repeat="article in articles | filter:query| orderBy: publishedAt">
+    <li class="media" ng-repeat="article in articles | filter:trashCheck | orderBy: publishedAt">
      
       <!-- Edit article -->
       <a class="pull-right" ng-href="/article/{{article._id}}/edit">
@@ -49,7 +49,7 @@
 <!-- {{article}} -->
       
       <!-- Hide Article -->
-
+{{article}}
       <a class="pull-right" ng-click='hidePost(article)'><i class="icon-trash"></i>Trash
       </a>
 
