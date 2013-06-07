@@ -3,24 +3,15 @@ angular.module('App').controller('ArticleNewCtrl',
   
   $scope.article = {};
 
-  /*$scope.mode = 'New';
-  $http.get('/api/session').success(function(data) {
-    $scope.article.author = data.user;
-  });*/
-
-
-
 //////////////    Username Retrieval    ///////////////////////////////////////
 //
 //    This function deternimes the currently logged in user.  
 ///////////////////////////////////////////////////////////////////////////////
 
-
   $scope.mode = 'New';
   $http.get('/api/session').success(function(data) {
     $scope.user = data.user;
   });
-
 
 //////////////    Saver   /////////////////////////////////////////////////////
 //
@@ -31,7 +22,6 @@ angular.module('App').controller('ArticleNewCtrl',
     article.author = $scope.user;
     article.type = 'article';
     article._deleted = false;
-    console.log(article);
     article.publishedAt = moment().format('MMMM Do YYYY, h:mm:ss a');
     article.slug = article.title.toLowerCase().replace(' ', '-');
     article.tags = article.tags.toUpperCase();
@@ -41,19 +31,13 @@ angular.module('App').controller('ArticleNewCtrl',
       $location.path('/dashboard');
     })
     .error(function(err) {
-    //alerts.push({type: 'error', msg: 'Error: ' + err.error +'!'});
+    alerts.push({type: 'error', msg: 'Error: ' + err.error +'!'});
     });
   };
-
 
   $scope.cancel = function() {
     $location.path('/dashboard');
   };
-
-/*
-  $scope.article.attachment = function(article_rev) {
-    $http.post('/api/article/attachment/'+ article_rev);
-  };*/
 
  /* $scope.$watch('article.title', function(){
     console.log($scope.article.title);

@@ -1,4 +1,4 @@
-angular.module('App').controller('SignupCtrl', function($scope, $http, $location, $dialog) {
+angular.module('App').controller('SignupCtrl', function($scope, $http, $location, $dialog, alerts) {
 
 //////////////  Login Function ////////////////////////////////////////////////
 //
@@ -23,7 +23,6 @@ angular.module('App').controller('SignupCtrl', function($scope, $http, $location
   $scope.register = function(user) {
     $http.post('/api/signup', user)
       .success(function(user) {
-        $location.path('/dashboard');
       })
       .error(function(err) {
         // alert error

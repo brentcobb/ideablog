@@ -16,7 +16,7 @@ angular.module('App', ['ui.bootstrap', 'ui.codemirror', 'http-auth-interceptor']
       })
       .when('/article', {
         controller: 'ArticleCtrl', 
-        templateUrl: '/article.html'
+        templateUrl: '/app/templates/article.html'
       })
       .when('/article/new', { 
         controller: 'ArticleNewCtrl', 
@@ -37,6 +37,10 @@ angular.module('App', ['ui.bootstrap', 'ui.codemirror', 'http-auth-interceptor']
       .when('/:user/:slug', { 
         controller: 'ArticleCtrl', 
         templateUrl: '/app/templates/article.html'
+      })
+      .when('/:user/settings', {
+        controller: 'SettingsCtrl',
+        templateUrl: '/app/templates/settings.html'
       })
       .otherwise({
         redirectTo: ('/')

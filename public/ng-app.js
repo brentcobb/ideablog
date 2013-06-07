@@ -16,7 +16,7 @@ angular.module('App', ['ui.bootstrap', 'ui.codemirror', 'http-auth-interceptor']
       })
       .when('/article', {
         controller: 'ArticleCtrl', 
-        templateUrl: '/article.html'
+        templateUrl: '/app/templates/article.html'
       })
       .when('/article/new', { 
         controller: 'ArticleNewCtrl', 
@@ -38,13 +38,41 @@ angular.module('App', ['ui.bootstrap', 'ui.codemirror', 'http-auth-interceptor']
         controller: 'ArticleCtrl', 
         templateUrl: '/app/templates/article.html'
       })
+      .when('/:user/settings', {
+        controller: 'SettingsCtrl',
+        templateUrl: '/app/templates/settings.html'
+      })
       .otherwise({
         redirectTo: ('/')
       })
     ;
   });
-angular.module('App').value('alerts', []);
+
+
+/* services.js */
+
+// don't forget to declare this service module as a dependency in your main app constructor!
+var appServices = angular.module('appApp.services', []);
+
+appServices.factory('alertService', function($rootScope) {
+    var alertService = {};
+
+    // create an array of alerts available globally
+    $rootScope.alerts = [];
+
+    alertService.add = function(type, msg) {
+      $rootScope.alerts.push({'type': type, 'msg': msg});
+    };
+
+    alertService.closeAlert = function(index) {
+      $rootScope.alerts.splice(index, 1);
+    };
+
+    return alertService;
+  });
 angular.module('App').value('$markdown', markdown);
+angular.module('App').value('$moment', moment);
+angular.module('App').value('$_', _);
 angular.module('App').filter('mdImage', function() {
   return function(input) {
     if (input) {
@@ -52,8 +80,6 @@ angular.module('App').filter('mdImage', function() {
     }
   };
 });
-angular.module('App').value('$moment', moment);
-angular.module('App').value('$_', _);
 angular.module('App').directive('uploadButton', function($parse, $compile) {
   return {
     restrict: 'E',
@@ -80,13 +106,13 @@ angular.module('App').directive('uploadButton', function($parse, $compile) {
     }
   };
 });
-angular.module('App').controller('LoginCtrl', function($scope, $http, $location, authService, dialog) {
+angular.module('App').controller('LoginCtrl', function($scope, $http, $location, authService, dialog, alerts) {
   
   $scope.login = function(user) {
     $http.post('/api/login', user)
       .success(function(user) {
         dialog.close();
-        //alerts.push({type: 'success', msg: 'Successfully logged in.'});
+        alerts.push({type: 'success', msg: 'Successfully logged in.'});
         authService.loginConfirmed();
       })
       .error(function(err) {
@@ -100,13 +126,9 @@ angular.module('App').controller('LoginCtrl', function($scope, $http, $location,
   };
 
 });
-angular.module('App').controller('alertsCtrl', function($scope, $http, $_) {
-   
-  $scope.alert = {};
+angular.module('App').controller('SettingsCtrl', function($scope, $http, $routeParams, $location) {
 
-  $scope.closeAlert = function(index) {
-    $scope.alerts.splice(index, 1);
-  };
+
 });
 angular.module('App').controller('ArticleEditCtrl', function($scope, $http, $routeParams, $location) {
   $scope.mode = 'Edit';
@@ -141,24 +163,15 @@ angular.module('App').controller('ArticleNewCtrl',
   
   $scope.article = {};
 
-  /*$scope.mode = 'New';
-  $http.get('/api/session').success(function(data) {
-    $scope.article.author = data.user;
-  });*/
-
-
-
 //////////////    Username Retrieval    ///////////////////////////////////////
 //
 //    This function deternimes the currently logged in user.  
 ///////////////////////////////////////////////////////////////////////////////
 
-
   $scope.mode = 'New';
   $http.get('/api/session').success(function(data) {
     $scope.user = data.user;
   });
-
 
 //////////////    Saver   /////////////////////////////////////////////////////
 //
@@ -169,7 +182,6 @@ angular.module('App').controller('ArticleNewCtrl',
     article.author = $scope.user;
     article.type = 'article';
     article._deleted = false;
-    console.log(article);
     article.publishedAt = moment().format('MMMM Do YYYY, h:mm:ss a');
     article.slug = article.title.toLowerCase().replace(' ', '-');
     article.tags = article.tags.toUpperCase();
@@ -179,19 +191,13 @@ angular.module('App').controller('ArticleNewCtrl',
       $location.path('/dashboard');
     })
     .error(function(err) {
-    //alerts.push({type: 'error', msg: 'Error: ' + err.error +'!'});
+    alerts.push({type: 'error', msg: 'Error: ' + err.error +'!'});
     });
   };
-
 
   $scope.cancel = function() {
     $location.path('/dashboard');
   };
-
-/*
-  $scope.article.attachment = function(article_rev) {
-    $http.post('/api/article/attachment/'+ article_rev);
-  };*/
 
  /* $scope.$watch('article.title', function(){
     console.log($scope.article.title);
@@ -254,7 +260,6 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
 
   $http.get('/api/article').success(function(data) {
     $scope.articles = $_(data.rows).pluck('value');
-    //$scope.article.html = $markdown.toHTML($scope.article.body);
   });
 
 //////////////    Logout function   ///////////////////////////////////////////
@@ -276,17 +281,11 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
 //    This function deternimes the currently logged in user.  
 ///////////////////////////////////////////////////////////////////////////////
 
-
-  $scope.mode = 'New';
   $http.get('/api/session').success(function(data) {
     $scope.user = data.user;
   });
 
-//////////////    test area   /////////////////////////////////////////////////
-//
-//    Working on a function to delete posts.  I think i have it set up correct.
-//    I just need to make the articles show correctly so that they can be 
-//    deleted.
+//////////////    Hide Articles   /////////////////////////////////////////////
 //
 //    The hidePost works, after clicking the button you must refresh the page
 //    for the hiding to work.  
@@ -299,7 +298,7 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
 
 });
 
-angular.module('App').controller('HomeCtrl', function($scope, $routeParams, $http, $markdown, $_) {
+angular.module('App').controller('HomeCtrl', function($scope, $routeParams, $http, $markdown, $_, alerts, $location) {
   
 /*  $scope.user = $routeParams.user;
   $http.get('/api/article/' + $routeParams.user + '/all')
@@ -307,7 +306,7 @@ angular.module('App').controller('HomeCtrl', function($scope, $routeParams, $htt
       $scope.articles = $_(data.rows).pluck('value');
     });*/
 
- /* $scope.mode = 'New';*/
+  $scope.mode = 'New';
   $http.get('/api/session').success(function(data) {
     $scope.user = data.user;
   });
@@ -316,8 +315,24 @@ angular.module('App').controller('HomeCtrl', function($scope, $routeParams, $htt
     $scope.articles = $_(data.rows).pluck('value');
   });
 
+
+//////////////    Logout function   ///////////////////////////////////////////
+//
+//    This function logs the user out.  Will turn into factory to reduce 
+//    duplicate code at a later date, as I want to have a logout button in
+//    more than one place.
+///////////////////////////////////////////////////////////////////////////////
+
+  $scope.logout = function() {
+    $http.post('/api/logout').success(function(data) {
+      alerts.push({type: 'success', msg: 'Successfully logged out.'});
+      $location.path('/');
+    });
+  };
+
+
 });
-angular.module('App').controller('SignupCtrl', function($scope, $http, $location, $dialog) {
+angular.module('App').controller('SignupCtrl', function($scope, $http, $location, $dialog, alerts) {
 
 //////////////  Login Function ////////////////////////////////////////////////
 //
@@ -342,7 +357,6 @@ angular.module('App').controller('SignupCtrl', function($scope, $http, $location
   $scope.register = function(user) {
     $http.post('/api/signup', user)
       .success(function(user) {
-        $location.path('/dashboard');
       })
       .error(function(err) {
         // alert error

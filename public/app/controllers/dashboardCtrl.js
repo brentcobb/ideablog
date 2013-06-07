@@ -7,7 +7,6 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
 
   $http.get('/api/article').success(function(data) {
     $scope.articles = $_(data.rows).pluck('value');
-    //$scope.article.html = $markdown.toHTML($scope.article.body);
   });
 
 //////////////    Logout function   ///////////////////////////////////////////
@@ -29,17 +28,11 @@ angular.module('App').controller('DashboardCtrl', function($scope, $http, $locat
 //    This function deternimes the currently logged in user.  
 ///////////////////////////////////////////////////////////////////////////////
 
-
-  $scope.mode = 'New';
   $http.get('/api/session').success(function(data) {
     $scope.user = data.user;
   });
 
-//////////////    test area   /////////////////////////////////////////////////
-//
-//    Working on a function to delete posts.  I think i have it set up correct.
-//    I just need to make the articles show correctly so that they can be 
-//    deleted.
+//////////////    Hide Articles   /////////////////////////////////////////////
 //
 //    The hidePost works, after clicking the button you must refresh the page
 //    for the hiding to work.  

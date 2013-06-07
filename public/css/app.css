@@ -15,3 +15,7 @@
   direction: ltr;
   cursor: pointer;
 }
+
+.searchbar {
+  padding-top: 8px;
+}
