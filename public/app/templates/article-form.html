@@ -45,10 +45,10 @@
     </div>
 
     <div class="control-group">
-      <label class="control-label">Published</label>
+      <label class="control-label"></label>
       <!-- list attachments doc name should be slug... -->
       <div class="controls">
-        <input type="text" ui-date ng-model="article.publishedAt">
+        <input class="invisible" type="text" ui-date ng-model="article.publishedAt">
       </div>
     </div>
 
@@ -85,7 +85,7 @@
   <div class="controls">
     <upload-button 
       class="btn btn-large"
-      action="/api/:slug" 
+      action="/api/uploads" 
       complete="uploadComplete($data)">
       <i class="icon-picture"></i>
       Upload Image
